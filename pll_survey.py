@@ -6,12 +6,15 @@ data_file = "pll_data.xlsx"
 data = pd.read_excel(data_file)
 
 # Extract columns from the Excel file
-plls = data["Proceedings"]  # Column for PLL publication tilte and year
-fom = data["FOM"]  # Column for FOM
-frac_spur = data["FracSpur"]  # Column for worst fractional spur level
-area = data["Area"]  # Column for area
-types = data["Architecture"].apply(lambda x: 'BBPLL' if 'BBPLL' in str(x) else x)  # Assign Type 1 to entries containing '1'
-osc_types = data["Oscillator"] # Oscillator type (Ring oscillator or LC oscillator)
+plot_flag = data["Plot"] # To plot the data in the generated graph or not
+data_to_plot = data[plot_flag]
+plls = data_to_plot["Proceedings"]  # Column for PLL publication tilte and year
+fom = data_to_plot["FOM"]  # Column for FOM
+frac_spur = data_to_plot["FracSpur"]  # Column for worst fractional spur level
+area = data_to_plot["Area"]  # Column for area
+types = data_to_plot["Architecture"].apply(lambda x: 'BBPLL' if 'BBPLL' in str(x) else x)  # Assign Type 1 to entries containing '1'
+osc_types = data_to_plot["Oscillator"] # Oscillator type (Ring oscillator or LC oscillator)
+
 
 # To debug the code you may use the following commands
 # import ipdb
@@ -32,27 +35,28 @@ for t, marker in [('BBPLL', 'o'), ('DPLL', 's'), ('MDLL', '^')]:
     scatter = plt.scatter(
         fom[type_filter],
         frac_spur[type_filter],
-        s=[sizes[i] for i in range(len(sizes)) if types[i] == t],
-        c=[osc_types_colors[i] for i in range(len(osc_types_colors)) if types[i] == t],
+        s=[sizes[i] for i in range(len(sizes)) if types.iloc[i] == t],
+        c=[osc_types_colors[i] for i in range(len(osc_types_colors)) if types.iloc[i] == t],
         marker=marker,
         alpha=0.8, 
         label=f"Type {t}")
 
 # Add labels for each pll
 for i, pll in enumerate(plls):
-    plt.text(fom[i], frac_spur[i], pll, fontsize=9, ha='right', va='bottom')
+    plt.text(fom.iloc[i], frac_spur.iloc[i], pll, fontsize=9, ha='right', va='bottom')
 
 # Emphasize the first data input with a red star
-plt.scatter(
-    fom[0], 
-    frac_spur[0], 
-    s=2500,  # Fixed size for emphasis
-    edgecolor="red",
-    facecolor="none",
-    linewidth=1.5,
-    marker="*", 
-    label="Highlighted PLL"
-)
+if 0 in plls.index:
+    plt.scatter(
+        fom[0], 
+        frac_spur[0], 
+        s=2500,  # Fixed size for emphasis
+        edgecolor="red",
+        facecolor="none",
+        linewidth=1.5,
+        marker="*", 
+        label="Highlighted PLL"
+    )
 
 # Set plot labels and title
 plt.xlabel("FOM (dB)", fontsize=16)
