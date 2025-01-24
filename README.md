@@ -7,6 +7,10 @@ It is all free and with a permisssive license to use this repository in any form
 For citation use this information: \
 Parham Davami, "Phase-Locked Loops (PLL) Performance Survey", [online]. Available: https://github.com/Parhamdada/PLL_survey
 
+## Usage
+Adopt `pll_data.xlsx` Excel file to your needs. \
+Run the Python code with command `python pll_survey.py`
+
 ## Contributions
 This repo needs ***YOU***. With your collaboration we can make this repo more impactful.
 
