@@ -1,85 +1,94 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
+import matplotlib.colors as mcolors
+import itertools
 
-# Read data from Excel file
+# Read data from Excel file and convert to a list of dictionaries
 data_file = "pll_data.xlsx"
-data = pd.read_excel(data_file)
-
-# Extract columns from the Excel file
-plot_flag = data["Plot"] # To plot the data in the generated graph or not
-data_to_plot = data[plot_flag]
-plls = data_to_plot["Proceedings"]  # Column for PLL publication tilte and year
-fom = data_to_plot["FOM"]  # Column for FOM
-frac_spur = data_to_plot["FracSpur"]  # Column for worst fractional spur level
-area = data_to_plot["Area"]  # Column for area
-types = data_to_plot["Architecture"].apply(lambda x: 'BBPLL' if 'BBPLL' in str(x) else x)  # Assign Type 1 to entries containing '1'
-osc_types = data_to_plot["Oscillator"] # Oscillator type (Ring oscillator or LC oscillator)
-
+data = pd.read_excel(data_file).to_dict('records')
 
 # To debug the code you may use the following commands
 # import ipdb
 # ipdb.set_trace()
 
 # Normalize the size for better visualization
-size_scale = 0.002  # Adjust this scale as needed for better visualization
-sizes = [size / size_scale for size in area]
+size_scale = 0.002
 
-# Map oscillator types to numerical values for coloring
-color_map = {"LC": "green", "Ring": "blue"}
-osc_types_colors = [color_map[x] for x in osc_types]
+# Map oscillator types to colors
+color_map = {
+    "TDC-DPLL": "green",
+    "BB-DPLL": "blue",
+    "TDC-MDLL": "purple",
+    "SS-DPLL": "cyan",
+    # "CP-APLL": "orange"
+}
 
-# Create the plot
+# How to assign colors based on architectures
 plt.figure(figsize=(6.8, 6)) #Dimension of the figure in inches
-for t, marker in [('BBPLL', 'o'), ('DPLL', 's'), ('MDLL', '^')]:
-    type_filter = types == t
-    scatter = plt.scatter(
-        fom[type_filter],
-        frac_spur[type_filter],
-        s=[sizes[i] for i in range(len(sizes)) if types.iloc[i] == t],
-        c=[osc_types_colors[i] for i in range(len(osc_types_colors)) if types.iloc[i] == t],
-        marker=marker,
-        alpha=0.8, 
-        label=f"Type {t}")
+for item in data:
+    # Color is based on Phase detector and architecture types
+    phase_det = item['PhaseDetector'].split('/')
+    arch = item['Architecture'].split('/')
+    item['arch_name'] = ["{}-{}".format(pd_type, arch_type) for pd_type, arch_type in zip(phase_det, itertools.cycle(arch))]
+    color_list = [mcolors.to_rgb(color_map.get(name, 'gray')) for name in item['arch_name']]
+    item['plot_color'] = np.mean(color_list, axis=0)
+    
+    
+    item['plot_shape'] = {'Ring': 's', 'LC': 'o'}.get(item['Oscillator'])
+    item['plot_size'] = item['Area'] / size_scale
 
-# Add labels for each pll
-for i, pll in enumerate(plls):
-    plt.text(fom.iloc[i], frac_spur.iloc[i], pll, fontsize=9, ha='right', va='bottom')
+    if (item['Plot'] is not False) & (item['FracSpur'] is not None):
+        plt.scatter(
+            item['FOM'],
+            item['FracSpur'],
+            s=item['plot_size'],
+            facecolor=item['plot_color'],
+            marker=item['plot_shape'],
+            alpha=0.8
+        )
+        plt.text(
+            item['FOM'],
+            item['FracSpur'],
+            item['Proceedings'],
+            fontsize=9,
+            ha='right',
+            va='bottom'
+        )
+
 
 # Emphasize the first data input with a red star
-if 0 in plls.index:
+if (data[0]['Plot'] is not False) & (data[0]['FracSpur'] is not None):
     plt.scatter(
-        fom[0], 
-        frac_spur[0], 
+        data[0]['FOM'],
+        data[0]['FracSpur'],
         s=2500,  # Fixed size for emphasis
         edgecolor="red",
         facecolor="none",
         linewidth=1.5,
-        marker="*", 
-        label="Highlighted PLL"
+        marker="*"
     )
 
 # Set plot labels and title
 plt.xlabel("FOM (dB)", fontsize=16)
 plt.ylabel("Fractional Spur (dBc)", fontsize=16)
-# plt.title("Comparison of PLLs", fontsize=14)
+# plt.title("Comparison of fractional PLLs", fontsize=14)
 # plt.xlim(80, 100)  # Adjust x-axis limits if necessary
 # plt.ylim(0, 6e9)  # Adjust y-axis limits if necessary
 
-# Add a legend for oscillator type
-import matplotlib.patches as mpatches
-ring_patch = mpatches.Patch(color="blue", label="Ring")
-lc_patch = mpatches.Patch(color="green", label="LC")
-osc_type_legend = plt.legend(handles=[ring_patch, lc_patch], title="Oscillator type", fontsize=16, loc="upper left")
+# Add a legend for PLL types
+from matplotlib.lines import Line2D
+color_legends = [Line2D([],[], color="white", marker='o', markersize=10, markerfacecolor=value, label=key) 
+                    for key, value in color_map.items()]
+osc_type_legend = plt.legend(handles=color_legends, title="PLL type", fontsize=10, loc="upper right")
 plt.gca().add_artist(osc_type_legend)
 
-# Add legend for PLL types
-from matplotlib.lines import Line2D
+# Add legend for oscillator types
 type_legend_elements = [
-    Line2D([0], [0], marker='o', color='k', label='BBPLL', markersize=10),
-    Line2D([0], [0], marker='s', color='k', label='DPLL (w/ TDC)', markersize=10),
-    Line2D([0], [0], marker='^', color='k', label='MDLL', markersize=10)
+    Line2D([0], [0], marker='o', color='w', markerfacecolor='k', label='LC', markersize=10),
+    Line2D([0], [0], marker='s', color='w', markerfacecolor='k', label='Ring', markersize=10),
 ]
-plt.legend(handles=type_legend_elements, title="PLL Type", fontsize=16, loc="upper right")
+plt.legend(handles=type_legend_elements, title="Oscillator type", fontsize=10, loc="upper left")
 
 # Add a footnote
 plt.figtext(0, 0.005, "*Size of each point corresponds to the area of the PLL", 
