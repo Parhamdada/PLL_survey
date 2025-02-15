@@ -1,7 +1,9 @@
 # PLL_survey
-A repository of most recent published PLLs, with comparison graphs. \
+A repository of most recent published PLLs, with performance comparison graphs.
+
 For example the following graph is comparing fractional PLLs based on their FOM and worst fractional spur level highlighting differences in area, oscillator type, and PLL type. (The highlighted point is just an example to show how you can compare your design agains other references.)
-[](./Spur_FOM.svg)
+![Spur FOM example](./Spur_FOM.svg)
+
 
 
 ## Cite this survey
@@ -18,6 +20,9 @@ If you want to compare your design with other references, adapt `pll_data.xlsx` 
 This repo needs ***YOU***. With your collaboration we can make this repo more impactful.
 
 For contributions, please;
-1. make a new branch with a name like `ENH/additional_references` (TAGs can be: `FEAT` for a feature in code like a new comparison graph, `ENH` for additional references, `BUG` for something wrong somewhere (even here!))
+1. make a new branch with a name like `ENH/additional_references` (TAGs can be: `FEAT` for a feature in code like a new comparison graph, `ENH` for additional references, `BUG` for correcting something wrong somewhere (even here!))
 2. Create a pull request to the main branch, your branch will be merged to the main branch after a compatibility review.
 3. Your name will be added to the authors' list for citation
+
+
+If you face a bug or need a feature but you don't have the bandwidth to implement yourself, please open an issue item with a discription and it will be handled by the contributors.
