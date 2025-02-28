@@ -21,7 +21,7 @@ color_map = {
     "BB-DPLL": "blue",
     "TDC-MDLL": "purple",
     "SS-DPLL": "cyan",
-    # "CP-APLL": "orange"
+    "BB-MDLL": "orange"
 }
 
 # How to assign colors based on architectures
