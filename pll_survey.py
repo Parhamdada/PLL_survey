@@ -21,7 +21,9 @@ color_map = {
     "BB-DPLL": "blue",
     "TDC-MDLL": "purple",
     "SS-DPLL": "cyan",
-    "BB-MDLL": "orange"
+    "BB-MDLL": "orange",
+    "SS-APLL": "yellow",
+    "CP-ILCM": "brown"
 }
 
 # How to assign colors based on architectures
@@ -38,7 +40,7 @@ for item in data:
     item['plot_shape'] = {'Ring': 's', 'LC': 'o'}.get(item['Oscillator'])
     item['plot_size'] = item['Area'] / size_scale
 
-    if (item['Plot'] is not False) & (item['FracSpur'] is not None):
+    if (item['Plot'] is not False) & (~np.isnan(item['FracSpur'])):
         plt.scatter(
             item['FOM'],
             item['FracSpur'],
@@ -58,7 +60,7 @@ for item in data:
 
 
 # Emphasize the first data input with a red star
-if (data[0]['Plot'] is not False) & (data[0]['FracSpur'] is not None):
+if (data[0]['Plot'] is not False) & (~np.isnan(data[0]['FracSpur'])):
     plt.scatter(
         data[0]['FOM'],
         data[0]['FracSpur'],
