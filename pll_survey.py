@@ -1,8 +1,12 @@
 import matplotlib.pyplot as plt
+import matplotlib
 import pandas as pd
 import numpy as np
 import matplotlib.colors as mcolors
 import itertools
+
+# Set fonttype to TrueType (42) to ensure proper font embedding
+matplotlib.rcParams['pdf.fonttype'] = 42
 
 # Read data from Excel file and convert to a list of dictionaries
 data_file = "pll_data.xlsx"
