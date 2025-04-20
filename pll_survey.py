@@ -99,13 +99,14 @@ type_legend_elements = [
 plt.legend(handles=type_legend_elements, title="Oscillator type", fontsize=10, loc="upper left")
 
 # Add a footnote
-plt.figtext(0, 0.005, "*Size of each point corresponds to the area of the PLL", 
+plt.figtext(0, 0.01, "*Size of each point corresponds to the area of the PLL" \
+            "\n**Complex architectures are shown with mixed colors" , \
             wrap=True, horizontalalignment='left', fontsize=12, alpha=0.7)
 
 # Show grid
 plt.grid(True, linestyle="--", alpha=0.6)
 
-plt.tight_layout()
+plt.tight_layout(rect=(0, 0.04, 1, 1))  # Adjust layout to make room for the footnote
 
 # Example command to save the plot
 plt.savefig('Spur_FOM.svg', format='svg')
