@@ -29,6 +29,7 @@ color_map = {
     "SS-APLL": "yellow",
     "CP-ILCM": "brown"
 }
+used_colors = set()
 
 plt.figure(figsize=(6.8, 6)) #Dimension of the figure in inches
 for item in data:
@@ -60,6 +61,7 @@ for item in data:
             ha='right',
             va='bottom'
         )
+        used_colors.update(item['arch_name'])
 
 
 # Emphasize the first data input with a red star
@@ -82,9 +84,10 @@ plt.ylabel("Fractional Spur (dBc)", fontsize=16)
 # plt.ylim(0, 6e9)  # Adjust y-axis limits if necessary
 
 # Add a legend for PLL types
+filtered_color_map = {key: value for key, value in color_map.items() if key in used_colors}
 from matplotlib.lines import Line2D
 color_legends = [Line2D([],[], color="white", marker='o', markersize=10, markerfacecolor=value, label=key) 
-                    for key, value in color_map.items()]
+                    for key, value in filtered_color_map.items()]
 osc_type_legend = plt.legend(handles=color_legends, title="PLL type", fontsize=10, loc="upper right")
 plt.gca().add_artist(osc_type_legend)
 
