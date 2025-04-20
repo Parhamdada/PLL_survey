@@ -18,8 +18,8 @@ For using this repository you need to have [python](https://www.python.org/) ins
 If you want to compare your design with other references, adapt the first input line of `pll_data.csv` file and run the python code.
 
 ### Data item guide
-. Remove the items in the plot by setting its corresponding plot flag to 'FALSE'.
-. Integer PLLs have empty fractional spur collumn.
+* Remove the items in the plot by setting its corresponding plot flag to 'FALSE'.
+* Integer PLLs have empty fractional spur column.
 
 
 ## Contributions
