@@ -102,6 +102,10 @@ plt.figtext(0, 0.005, "*Size of each point corresponds to the area of the PLL",
 # Show grid
 plt.grid(True, linestyle="--", alpha=0.6)
 
-# Show the plot
 plt.tight_layout()
+
+# Example command to save the plot
+plt.savefig('Spur_FOM.svg', format='svg')
+
+# Show the plot
 plt.show()
