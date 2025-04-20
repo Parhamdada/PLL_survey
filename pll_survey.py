@@ -9,8 +9,8 @@ import itertools
 matplotlib.rcParams['pdf.fonttype'] = 42
 
 # Read data from Excel file and convert to a list of dictionaries
-data_file = "pll_data.xlsx"
-data = pd.read_excel(data_file).to_dict('records')
+data_file = 'pll_data.csv'
+data = pd.read_csv(data_file, quotechar='"').to_dict('records')
 
 # To debug the code you may use the following commands
 # import ipdb
@@ -30,7 +30,6 @@ color_map = {
     "CP-ILCM": "brown"
 }
 
-# How to assign colors based on architectures
 plt.figure(figsize=(6.8, 6)) #Dimension of the figure in inches
 for item in data:
     # Color is based on Phase detector and architecture types
