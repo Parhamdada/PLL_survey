@@ -15,7 +15,12 @@ Parham Davami, "Phase-Locked Loops (PLL) Performance Survey", [online]. Availabl
 
 ## Usage
 For using this repository you need to have [python](https://www.python.org/) installed. Then you may clone or download the repository, and run the python code with command `python pll_survey.py`. \
-If you want to compare your design with other references, adapt `pll_data.xlsx` Excel file and run the python code.
+If you want to compare your design with other references, adapt the first input line of `pll_data.csv` file and run the python code.
+
+### Data item guide
+. Remove the items in the plot by setting its corresponding plot flag to 'FALSE'.
+. Integer PLLs have empty fractional spur collumn.
+
 
 ## Contributions
 This repo needs ***YOU***. With your collaboration we can make this repo more impactful.

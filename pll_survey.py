@@ -9,8 +9,8 @@ import itertools
 matplotlib.rcParams['pdf.fonttype'] = 42
 
 # Read data from Excel file and convert to a list of dictionaries
-data_file = "pll_data.xlsx"
-data = pd.read_excel(data_file).to_dict('records')
+data_file = 'pll_data.csv'
+data = pd.read_csv(data_file, quotechar='"').to_dict('records')
 
 # To debug the code you may use the following commands
 # import ipdb
@@ -29,8 +29,8 @@ color_map = {
     "SS-APLL": "yellow",
     "CP-ILCM": "brown"
 }
+used_colors = set()
 
-# How to assign colors based on architectures
 plt.figure(figsize=(6.8, 6)) #Dimension of the figure in inches
 for item in data:
     # Color is based on Phase detector and architecture types
@@ -61,6 +61,7 @@ for item in data:
             ha='right',
             va='bottom'
         )
+        used_colors.update(item['arch_name'])
 
 
 # Emphasize the first data input with a red star
@@ -83,9 +84,10 @@ plt.ylabel("Fractional Spur (dBc)", fontsize=16)
 # plt.ylim(0, 6e9)  # Adjust y-axis limits if necessary
 
 # Add a legend for PLL types
+filtered_color_map = {key: value for key, value in color_map.items() if key in used_colors}
 from matplotlib.lines import Line2D
 color_legends = [Line2D([],[], color="white", marker='o', markersize=10, markerfacecolor=value, label=key) 
-                    for key, value in color_map.items()]
+                    for key, value in filtered_color_map.items()]
 osc_type_legend = plt.legend(handles=color_legends, title="PLL type", fontsize=10, loc="upper right")
 plt.gca().add_artist(osc_type_legend)
 
@@ -97,12 +99,17 @@ type_legend_elements = [
 plt.legend(handles=type_legend_elements, title="Oscillator type", fontsize=10, loc="upper left")
 
 # Add a footnote
-plt.figtext(0, 0.005, "*Size of each point corresponds to the area of the PLL", 
+plt.figtext(0, 0.01, "*Size of each point corresponds to the area of the PLL" \
+            "\n**Complex architectures are shown with mixed colors" , \
             wrap=True, horizontalalignment='left', fontsize=12, alpha=0.7)
 
 # Show grid
 plt.grid(True, linestyle="--", alpha=0.6)
 
+plt.tight_layout(rect=(0, 0.04, 1, 1))  # Adjust layout to make room for the footnote
+
+# Example command to save the plot
+plt.savefig('Spur_FOM.svg', format='svg')
+
 # Show the plot
-plt.tight_layout()
 plt.show()
