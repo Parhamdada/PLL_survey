@@ -1,8 +1,8 @@
 import csv
 import ipdb
 
-input_file = "pll_data_input.csv"
-output_file = "pll_data.csv"
+input_file = "NewPapers_forSurvey.csv"
+output_file = "pll_data_new.csv"
 
 with open(input_file, "r", newline="", encoding="utf-8") as infile, \
      open(output_file, "w", newline="", encoding="utf-8") as outfile:
