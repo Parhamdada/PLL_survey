@@ -27,7 +27,8 @@ color_map = {
     "SS-DPLL": "cyan",
     "BB-MDLL": "orange",
     "SS-APLL": "yellow",
-    "CP-ILCM": "brown"
+    "CP-ILCM": "brown",
+    "CP-APLL": "pink",
 }
 used_colors = set()
 
