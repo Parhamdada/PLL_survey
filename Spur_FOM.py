@@ -45,24 +45,25 @@ for item in data:
     item['plot_shape'] = {'Ring': 's', 'LC': 'o'}.get(item['Oscillator'])
     item['plot_size'] = item['Area'] / size_scale
 
-    if (item['Plot'] is not False) & (~np.isnan(item['FracSpur'])):
-        plt.scatter(
-            item['FOM'],
-            item['FracSpur'],
-            s=item['plot_size'],
-            facecolor=item['plot_color'],
-            marker=item['plot_shape'],
-            alpha=0.8
-        )
-        plt.text(
-            item['FOM'],
-            item['FracSpur'],
-            item['Proceedings'],
-            fontsize=9,
-            ha='right',
-            va='bottom'
-        )
-        used_colors.update(item['arch_name'])
+filtered_data = [item for item in data if (item['Plot'] is not False) & (~np.isnan(item['FracSpur']))]
+for item in filtered_data:
+    plt.scatter(
+        item['FOM'],
+        item['FracSpur'],
+        s=item['plot_size'],
+        facecolor=item['plot_color'],
+        marker=item['plot_shape'],
+        alpha=0.8
+    )
+    plt.text(
+        item['FOM'],
+        item['FracSpur'],
+        item['Proceedings'],
+        fontsize=9,
+        ha='right',
+        va='bottom'
+    )
+    used_colors.update(item['arch_name'])
 
 
 # Emphasize the first data input with a red star

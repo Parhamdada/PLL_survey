@@ -1,10 +1,17 @@
 # PLL_survey
-A repository of the most recent published PLLs, with various performance comparison graphs.
+A repository of the most recent published PLLs, with various performance comparison graphs. The figures demonstrate the PLL type and Oscillator type and compare them over metrics such as active area, FOM, Jitter, Power, etc.
 
-For example, the following graph is comparing fractional PLLs based on their FOM and worst fractional spur level highlighting differences in area, oscillator type, and PLL type. \
+### Fractional Spur vs. FOM
 (The highlighted point is just an example to show how you can compare your design against other references.)
 ![Spur FOM example](./Spur_FOM.svg)
 
+### Jitter vs. Fractional Spur
+(The highlighted point is just an example to show how you can compare your design against other references.)
+![Jitter Spur example](./Jitter_Spur.svg)
+
+### Power vs. Jitter
+(The highlighted point is just an example to show how you can compare your design against other references.)
+![Power Jitter example](./Power_Jitter.svg)
 
 
 ## Cite this survey
@@ -14,7 +21,7 @@ For citation use this information: \
 Parham Davami, "Phase-Locked Loops (PLL) Performance Survey", [online]. Available: https://github.com/Parhamdada/PLL_survey
 
 ## Usage
-For using this repository you need to have [python](https://www.python.org/) installed. Then you may clone or download the repository, and run the python code with command `python pll_survey.py`. \
+For using this repository you need to have [python](https://www.python.org/about/gettingstarted/) installed. Then you may clone or download the repository, and run the python code for each graph with the dedicated commands like `python Spur_FOM.py`. \
 If you want to compare your design with other references, adapt the first input line of `pll_data.csv` file and run the python code.
 
 ### Data item guide
