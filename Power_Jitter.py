@@ -23,12 +23,11 @@ size_scale = 0.002
 color_map = {
     "TDC-DPLL": "green",
     "BB-DPLL": "blue",
-    "TDC-MDLL": "purple",
-    "SS-DPLL": "cyan",
-    "BB-MDLL": "orange",
-    "SS-APLL": "yellow",
-    "CP-ILCM": "brown",
     "CP-APLL": "pink",
+    "SS-APLL": "yellow",
+    "TDC-MDLL": "purple",
+    "CP-ILCM": "brown",
+    "others": "gray",  # Default color for unrecognized types
 }
 used_colors = set()
 
@@ -38,10 +37,8 @@ for item in data:
     phase_det = item['PhaseDetector'].split('/')
     arch = item['Architecture'].split('/')
     item['arch_name'] = ["{}-{}".format(pd_type, arch_type) for pd_type, arch_type in zip(phase_det, itertools.cycle(arch))]
-    color_list = [mcolors.to_rgb(color_map.get(name, 'gray')) for name in item['arch_name']]
-    item['plot_color'] = np.mean(color_list, axis=0)
-    
-    
+    item['plot_color'] = color_map.get(item['arch_name'][0], color_map['others']) if len(item['arch_name']) == 1 else color_map['others']
+
     item['plot_shape'] = {'Ring': 's', 'LC': 'o'}.get(item['Oscillator'])
     item['plot_size'] = item['Area'] / size_scale
 
@@ -64,7 +61,7 @@ for item in filtered_data:
         ha='right',
         va='bottom'
     )
-    used_colors.update(item['arch_name'])
+    used_colors.add(item['plot_color'])
 
 
 # Emphasize the first data input with a red star
@@ -79,11 +76,11 @@ if (data[0]['Plot'] is not False):
         marker="*"
     )
 
-plt.xlim(8, 2000)  # Adjust x-axis limits if necessary
+plt.xlim(8, 3000)  # Adjust x-axis limits if necessary
 plt.ylim(0.5, 400)  # Adjust y-axis limits if necessary
 
 # Add FOM lines
-FOM_lines = [-260, -255, -250, -245, -240, -235]
+FOM_lines = [-260, -255, -250, -245, -240, -235, -230]
 FOM_values = [10**((x+300)/10) for x in FOM_lines]
 x_vals = np.logspace(np.log10(plt.xlim()[0]), np.log10(plt.xlim()[1]), 500)
 for FOM, label in zip(FOM_values, FOM_lines):
@@ -92,7 +89,7 @@ for FOM, label in zip(FOM_values, FOM_lines):
     # Add label to the line
     y_label_pos = 80
     x_label_pos = np.sqrt(FOM / y_label_pos)*1.1
-    plt.text(x_label_pos, y_label_pos, f"FOM={label}", fontsize=10, color='gray', alpha=0.85, ha='right', va='bottom', rotation=-55)
+    plt.text(x_label_pos, y_label_pos, f"FOM={label}", fontsize=10, color='gray', alpha=0.85, ha='right', va='bottom', rotation=-60)
 
 # Set plot labels and title
 plt.xlabel("Integrated Jitter (fs)", fontsize=16)
@@ -102,7 +99,7 @@ plt.yscale('log')
 # plt.title("Comparison of fractional PLLs", fontsize=14)
 
 # Add a legend for PLL types
-filtered_color_map = {key: value for key, value in color_map.items() if key in used_colors}
+filtered_color_map = {key: value for key, value in color_map.items() if value in used_colors}
 from matplotlib.lines import Line2D
 color_legends = [Line2D([],[], color="white", marker='o', markersize=10, markerfacecolor=value, label=key) 
                     for key, value in filtered_color_map.items()]
@@ -125,15 +122,14 @@ division_legend_elements = [
 plt.legend(handles=division_legend_elements, title=None, fontsize=10, loc="lower left")
 
 # Add a footnote
-plt.figtext(0, 0.01, "*Size of each point corresponds to the area of the PLL" \
-            "\n**Complex architectures are shown with mixed colors" , \
+plt.figtext(0, 0.01, "*Size of each point corresponds to the area of the PLL", \
             wrap=True, horizontalalignment='left', fontsize=12, alpha=0.7)
 
 # Show grid
 plt.minorticks_on()
 plt.grid(True, which="both", linestyle="--", alpha=0.6)
 
-plt.tight_layout(rect=(0, 0.04, 1, 1))  # Adjust layout to make room for the footnote
+plt.tight_layout()
 
 # Example command to save the plot
 plt.savefig('Power_Jitter.svg', format='svg')
