@@ -11,10 +11,12 @@ with open(input_file, "r", newline="", encoding="utf-8") as infile, \
     writer = csv.writer(outfile)
 
     author_column_idx = 2
+    tag_column_idx = 20
 
     for row in reader:
         # ipdb.set_trace()
         row[author_column_idx] = row[author_column_idx].replace("\n", " & ")
-        writer.writerow(row)        
+        row[tag_column_idx] = row[tag_column_idx].replace("/unread, ", "")
+        writer.writerow(row)
 
 print(f"Cleaned CSV saved to: {output_file}")

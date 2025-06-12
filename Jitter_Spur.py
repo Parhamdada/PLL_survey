@@ -23,12 +23,11 @@ size_scale = 0.002
 color_map = {
     "TDC-DPLL": "green",
     "BB-DPLL": "blue",
-    "TDC-MDLL": "purple",
-    "SS-DPLL": "cyan",
-    "BB-MDLL": "orange",
-    "SS-APLL": "yellow",
-    "CP-ILCM": "brown",
     "CP-APLL": "pink",
+    "SS-APLL": "yellow",
+    "TDC-MDLL": "purple",
+    "CP-ILCM": "brown",
+    "others": "gray",  # Default color for unrecognized types
 }
 used_colors = set()
 
@@ -38,10 +37,8 @@ for item in data:
     phase_det = item['PhaseDetector'].split('/')
     arch = item['Architecture'].split('/')
     item['arch_name'] = ["{}-{}".format(pd_type, arch_type) for pd_type, arch_type in zip(phase_det, itertools.cycle(arch))]
-    color_list = [mcolors.to_rgb(color_map.get(name, 'gray')) for name in item['arch_name']]
-    item['plot_color'] = np.mean(color_list, axis=0)
-    
-    
+    item['plot_color'] = color_map.get(item['arch_name'][0], color_map['others']) if len(item['arch_name']) == 1 else color_map['others']
+
     item['plot_shape'] = {'Ring': 's', 'LC': 'o'}.get(item['Oscillator'])
     item['plot_size'] = item['Area'] / size_scale
 
@@ -63,7 +60,7 @@ for item in filtered_data:
         ha='right',
         va='bottom'
     )
-    used_colors.update(item['arch_name'])
+    used_colors.add(item['plot_color'])
 
 
 # Emphasize the first data input with a red star
@@ -102,7 +99,7 @@ plt.ylabel("Integrated Jitter (fs)", fontsize=16)
 # plt.ylim(0, 6e9)  # Adjust y-axis limits if necessary
 
 # Add a legend for PLL types
-filtered_color_map = {key: value for key, value in color_map.items() if key in used_colors}
+filtered_color_map = {key: value for key, value in color_map.items() if value in used_colors}
 from matplotlib.lines import Line2D
 color_legends = [Line2D([],[], color="white", marker='o', markersize=10, markerfacecolor=value, label=key) 
                     for key, value in filtered_color_map.items()]
