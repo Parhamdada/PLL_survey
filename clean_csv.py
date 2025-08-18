@@ -1,7 +1,7 @@
 import csv
 import ipdb
 
-input_file = "NewPapers_forSurvey.csv"
+input_file = "NewPapers.csv"
 output_file = "pll_data_new.csv"
 
 with open(input_file, "r", newline="", encoding="utf-8") as infile, \
@@ -16,7 +16,7 @@ with open(input_file, "r", newline="", encoding="utf-8") as infile, \
     for row in reader:
         # ipdb.set_trace()
         row[author_column_idx] = row[author_column_idx].replace("\n", " & ")
-        row[tag_column_idx] = row[tag_column_idx].replace("/unread, ", "")
+        # row[tag_column_idx] = row[tag_column_idx].replace("/unread, ", "")
         writer.writerow(row)
 
 print(f"Cleaned CSV saved to: {output_file}")

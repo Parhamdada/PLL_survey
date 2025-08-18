@@ -81,13 +81,13 @@ if filtered_ring:
     min_jitter = min(item['Jitter'] for item in filtered_ring)
     plt.axhline(y=min_jitter, color='gray', linestyle='--', label='Min Ring-Oscillator Jitter')
     plt.text(
-        x=plt.gca().get_xlim()[1] - 15,  # Start of the x-axis
-        y=min_jitter + 0.05 * min_jitter,  # Slightly above the line
+        x=plt.gca().get_xlim()[1] - 17,  # Start of the x-axis
+        y=min_jitter - 0.05 * min_jitter,  # Slightly above the line
         s=f"Min Ring-Osc Jitter: {min_jitter:.0f} fs",
         color='gray',
         fontsize=10,
         ha='left',
-        va='bottom'
+        va='top'
     )
 
 
@@ -114,8 +114,7 @@ type_legend_elements = [
 plt.legend(handles=type_legend_elements, title="Oscillator type", fontsize=10, loc="upper left")
 
 # Add a footnote
-plt.figtext(0, 0.01, "*Size of each point corresponds to the area of the PLL" \
-            "\n**Complex architectures are shown with mixed colors" , \
+plt.figtext(0, 0.01, "*Size of each point corresponds to the area of the PLL", \
             wrap=True, horizontalalignment='left', fontsize=12, alpha=0.7)
 
 # Show grid
