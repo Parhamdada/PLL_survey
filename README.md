@@ -29,7 +29,7 @@ If you want to compare your design with other references, adapt the first input 
 * Integer PLLs have empty fractional spur column.
 
 ## Current status
-So far the following publications have been covered
+So far the following publications have been fully covered, and some further case-by-case submissions are included. If you see a missing paper please open an issue item and it will be handled by the contributors.
 | Publication | Year |
 |-------------|------|
 |JSSC| Jan.2024 to Aug.2025 |
