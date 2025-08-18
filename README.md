@@ -28,6 +28,17 @@ If you want to compare your design with other references, adapt the first input 
 * Remove the items in the plot by setting its corresponding plot flag to 'FALSE'.
 * Integer PLLs have empty fractional spur column.
 
+## Current status
+So far the following publications have been covered
+| Publication | Year |
+|-------------|------|
+|JSSC| Jan.2024 to Aug.2025 |
+|ISSCC| 2020 to 2025 |
+|VLSI| 2020 to 2025 |
+|RFIC| 2020 to 2025 |
+|CICC| 2020 to 2025 |
+|ESSERC| 2020 to 2024 |
+|ASSCC| 2020 to 2024 |
 
 ## Contributions
 This repo needs ***YOU***. With your collaboration we can make this repo more impactful.
